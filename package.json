@@ -1,0 +1,17 @@
+{
+  "name": "jsx-sample",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "tsc -b && node dist/test.js"
+  },
+  "devDependencies": {
+    "@types/jsdom": "^12.2.4",
+    "@types/node": "^12.12.14",
+    "typescript": "^3.7.2"
+  },
+  "dependencies": {
+    "jsdom": "^15.2.1"
+  }
+}
