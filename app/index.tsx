@@ -1,22 +1,19 @@
 import { h, create, diff, patch } from 'virtual-dom'
 
-class Count {
-  private count = 0
+namespace Store {
+  const state: {[id: string]: any} = {}
 
-  up() {
-    this.count++
-    VirtualDOMSample.update(this)
-  }
-
-  render(): VirtualDOM.VNode {
-    const styleProps = {
-      textAlign: 'center',
-      lineHeight: (100 + this.count) + 'px', 
-      border: '1px solid red',
-      width: (100 + this.count) + 'px',
-      height: (100 + this.count) + 'px'
+  export function useState<T>(initialValue: T): [T, (u: T) => void] {
+    for (;;) {
+      const id = String(Math.floor(Math.random() * 4503599627370495))
+      if (!state[id]) {
+        state[id] = initialValue
+        const setter = (u: T): void => {
+          state[id] = u
+        }
+        return [initialValue, setter]
+      }
     }
-    return <div style={styleProps} onclick={this.up}>{this.count}</div>
   }
 }
 
@@ -35,9 +32,6 @@ namespace VirtualDOMSample {
   }
 
   export const update = (element: Component) => {
-    console.log(element)
-    const a = element as any
-    console.log(a.tagName)
     let newTree = element.render()
     let patches = diff(tree, newTree)
     rootNode = patch(rootNode, patches)
@@ -45,4 +39,26 @@ namespace VirtualDOMSample {
   }
 }
 
-VirtualDOMSample.render(new Count(), document.body)
+class Count {
+  
+  constructor() {
+  }
+
+  render(): VirtualDOM.VNode {
+    const [count, setCount] =  Store.useState(0)
+
+
+    const styleProps = {
+      textAlign: 'center',
+      lineHeight: (100 + count) + 'px', 
+      border: '1px solid red',
+      width: (100 + count) + 'px',
+      height: (100 + count) + 'px'
+    }
+
+    return <div style={styleProps} onclick={setCount(count + 1)}>{count}</div>
+  }
+}
+
+const count = new Count()
+VirtualDOMSample.render(count, document.body)
