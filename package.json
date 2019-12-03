@@ -2,16 +2,21 @@
   "name": "jsx-sample",
   "version": "1.0.0",
   "main": "index.js",
+  "types": "index.d.ts",
   "license": "MIT",
   "scripts": {
-    "start": "tsc -b && node dist/test.js"
+    "start": "tsc -b && node dist/test.js",
+    "build": "tsc -b && browserify dist/index.js -o dist/bundle.js"
   },
   "devDependencies": {
     "@types/jsdom": "^12.2.4",
     "@types/node": "^12.12.14",
+    "@types/virtual-dom": "^2.1.0",
+    "browserify": "^16.5.0",
     "typescript": "^3.7.2"
   },
   "dependencies": {
-    "jsdom": "^15.2.1"
+    "jsdom": "^15.2.1",
+    "virtual-dom": "^2.1.1"
   }
 }
