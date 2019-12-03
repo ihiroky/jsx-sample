@@ -1,14 +1,11 @@
 import { h, create, diff, patch } from 'virtual-dom'
 
-interface Component {
-  render(): VirtualDOM.VNode
-}
-
 class Count {
   private count = 0
 
   up() {
     this.count++
+    VirtualDOMSample.update(this)
   }
 
   render(): VirtualDOM.VNode {
@@ -19,19 +16,33 @@ class Count {
       width: (100 + this.count) + 'px',
       height: (100 + this.count) + 'px'
     }
-    return <div style={styleProps}>{this.count}</div>
+    return <div style={styleProps} onclick={this.up}>{this.count}</div>
   }
 }
 
-const count = new Count()
-let tree = count.render()
-let rootNode = create(tree)
-document.body.appendChild(rootNode)
+namespace VirtualDOMSample {
+  let rootNode: Element
+  let tree: VirtualDOM.VNode
 
-setInterval(() => {
-  count.up()
-  let newTree = count.render()
-  let patches = diff(tree, newTree)
-  rootNode = patch(rootNode, patches)
-  tree = newTree
-}, 1000)
+  export interface Component {
+    render(): VirtualDOM.VNode
+  }
+  
+  export const render = (element: Component, container: Node) => {
+    tree = element.render()
+    rootNode = create(tree)
+    container.appendChild(rootNode)
+  }
+
+  export const update = (element: Component) => {
+    console.log(element)
+    const a = element as any
+    console.log(a.tagName)
+    let newTree = element.render()
+    let patches = diff(tree, newTree)
+    rootNode = patch(rootNode, patches)
+    tree = newTree
+  }
+}
+
+VirtualDOMSample.render(new Count(), document.body)
