@@ -1,5 +1,5 @@
 /* @jsx h */
-declare namespace h.JSX {
+declare namespace VirtualDOMJSX.JSX {
   type Element = VirtualDOM.VNode
 
   interface IntrinsicElements {
